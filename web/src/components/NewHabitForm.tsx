@@ -2,6 +2,16 @@ import { Check } from "phosphor-react";
 import * as Popover from '@radix-ui/react-popover';
 import * as Checkbox from '@radix-ui/react-checkbox'
 
+const avaliableWeekDays = [
+  'Domingo',
+  'Segunda-feira',
+  'Terça-feira',
+  'Quarta-feira',
+  'Quinta-feira',
+  'Sexta-feira',
+  'Sábado',
+]
+
 export function NewHabitForm(){
   return(
     <form className="w-full flex flex-col mt-6 ">
@@ -21,9 +31,12 @@ export function NewHabitForm(){
         Qual a recorrência?
       </label>
 
-      <div className='mt-6 flex flex-col gap-3'>
-              <Checkbox.Root
+      <div className='mt-3 flex flex-col gap-2'>
+        {avaliableWeekDays.map(weekDay => {
+          return(
+            <Checkbox.Root
                 className='flex items-center gap-3 group'
+                key={weekDay}
               >
                 <div
                   className='h-8 w-8 rounded-lg flex items-center justify-center bg-zinc-900 border-2 border-zinc-800 group-data-[state=checked]:bg-green-500 group-data-[state=checked]:border-green-500'
@@ -36,12 +49,16 @@ export function NewHabitForm(){
                   </Checkbox.Indicator>
                 </div>
 
-                <span
-                  className='font-semibold text-xl text-white leading-tight group-data-[state=checked]:line-through group-data-[state=checked]:text-zinc-400'
-                  
-                >
-                  Beber 2L de água</span>
-              </Checkbox.Root>
+              <span
+                className=' text-white leading-tight'
+              >
+                {weekDay}
+              </span>
+            </Checkbox.Root>
+          )
+        })}
+              
+              
             </div>
 
 
