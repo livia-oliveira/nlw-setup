@@ -8,6 +8,7 @@ import { DAY_SIZE, HabitDay } from '../components/HabitDay'
 import { Header } from '../components/Header'
 import { useState, useEffect } from 'react'
 import { Loading } from '../components/Loading'
+import dayjs from 'dayjs'
 
 
 const weekDays =  ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'] 
@@ -15,10 +16,17 @@ const datesFromYearStart = generateRangeDatesFromYearStart();
 const minimumSumaryDatesSizes = 18 * 5;
 const amountOfDaysToFill = minimumSumaryDatesSizes - datesFromYearStart.length;
 
+type SummaryProps = Array<{
+  id: string;
+  date: Date; 
+  amount: number;
+  completed: number;
+}>
+
 export function Home(){
 
   const [loading, setLoading] = useState(true);
-  const [summary, setSummary] = useState(null);
+  const [summary, setSummary] = useState<SummaryProps | null>(null);
  
   const {navigate} = useNavigation();
 
@@ -66,14 +74,24 @@ export function Home(){
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom:100}}
       >
-        <View className='flex-row flex-wrap'>
+        {
+          summary &&
+          <View className='flex-row flex-wrap'>
           {
-            datesFromYearStart.map(date =>(
-              <HabitDay 
-              key={date.toISOString()} 
-              onPress={() => navigate('habit', {date: date.toISOString()})}
-              />
-            ))
+            datesFromYearStart.map(date =>{
+              const dayWithHabit = summary.find( day => {
+                return dayjs(date).isSame(day.date, 'day')
+              })
+
+              return(
+                <HabitDay 
+                  date={date}
+                  amountOfHabits={dayWithHabit?.amount}
+                  amountCompleted={dayWithHabit?.completed}
+                  key={date.toISOString()} 
+                  onPress={() => navigate('habit', {date: date.toISOString()})}
+                />
+              )})
           }
           { 
             amountOfDaysToFill > 0 && Array
@@ -87,6 +105,7 @@ export function Home(){
               ))
           }
         </View>
+        }
       </ScrollView>
     </View>
   )
