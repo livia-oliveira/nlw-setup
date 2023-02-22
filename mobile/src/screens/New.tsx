@@ -34,7 +34,7 @@ export function New(){
       setTitle('')
       setWeekDays([])
 
-      Alert.alert("Novo hábito", "hábito criado com sucesso")
+      Alert.alert("Novo hábito", "hábito criado com sucesso!")
     } catch (error) {
       console.log(error);
       Alert.alert("Ops", "Não foi possível criar o novo hábito")
